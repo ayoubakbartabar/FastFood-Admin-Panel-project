@@ -1,0 +1,138 @@
+.dashboard-aside {
+    width: 220px;
+    background-color: #fff;
+    padding: 20px 10px;
+    overflow: hidden;
+    transition: width 0.3s;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.dashboard-aside.collapsed {
+    width: 40px;
+}
+
+.aside-logo {
+    width: 100%;
+    max-width: 150px;
+    margin-bottom: 40px;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.dashboard-aside.collapsed .aside-logo {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.aside-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+}
+
+.aside-menu-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 10px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.2s, background 0.2s;
+}
+
+.aside-menu-btn:hover {
+    color: #c7008a;
+    background-color: rgba(199, 0, 138, 0.05);
+    border-radius: 8px;
+}
+
+.menu-title {
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.dashboard-aside.collapsed .menu-title {
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+.aside-menu-btn svg {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+    .dashboard-aside {
+        width: 60px;
+        padding: 20px 5px;
+    }
+
+    .dashboard-aside.collapsed {
+        width: 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-aside {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 220px;
+        transition: left 0.3s;
+        z-index: 2000;
+    }
+
+    .dashboard-aside.open {
+        left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-aside {
+        width: 200px;
+    }
+
+    .aside-logo {
+        margin-bottom: 30px;
+    }
+
+    .aside-menu-btn {
+        padding: 10px 8px;
+        font-size: 14px;
+    }
+}
+
+.admin-dashboard {
+    display: flex;
+    width: 100%;
+}
+
+.dashboard-main {
+    flex: 1;
+    margin-left: 2px;
+    transition: margin-left 0.3s, width 0.3s;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+@media (max-width: 1024px) {
+    .dashboard-main {
+        margin-left: 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-main {
+        margin-left: 0;
+    }
+}
