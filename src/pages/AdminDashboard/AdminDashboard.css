@@ -9,12 +9,13 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #f5f5f5;
+    background-color: var(--color-white);
     transition: margin-left 0.3s ease, width 0.3s ease;
-    margin-left: 230px;
+    margin-left: 220px;
 }
+
 .dashboard-main.collapsed {
-    margin-left: 51px;
+    margin-left: 60px;
 }
 
 
