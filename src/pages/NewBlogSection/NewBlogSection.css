@@ -1,0 +1,193 @@
+.new-blog-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 80px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    color: var(--color-white);
+    font-family: var(--font-jost);
+}
+
+.blog-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 15px;
+    background-color: rgba(255, 179, 0, 0.751);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+.blog-form input,
+.blog-form textarea,
+.blog-form select {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background-color: var(--color-gray);
+    color: var(--color-white);
+    font-size: 15px;
+    transition: all 0.3s ease;
+    font-family: var(--font-jost);
+}
+
+.blog-form input::placeholder,
+.blog-form textarea::placeholder,
+.blog-form select option {
+    color: var(--color-gray-light);
+}
+
+.blog-form input:focus,
+.blog-form textarea:focus,
+.blog-form select:focus {
+    background-color: var(--color-gray-very-light);
+    box-shadow: 0 0 8px var(--color-primary);
+    position: relative;
+    z-index: 10;
+}
+
+.blog-form select {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg fill='%23ffffff' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 12px;
+}
+
+.textarea-input {
+    resize: none;
+    overflow: hidden;
+    height: 150px;
+    background-color: var(--background);
+    color: var(--paragraph);
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: var(--font-jost);
+    transition: all 0.3s ease;
+}
+
+.content-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.input-title,
+.form-title {
+    color: black;
+}
+
+/* .action-btn{
+   
+    background-color: var(--highlight);
+    color: var(--color-black);
+    padding: 8px 14px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+} */
+
+.action-btn {
+    font-family: var(--font-jost);
+    font-size: 18px;         
+    background-color: #212121; 
+    color: #fff;                 
+    display: flex;
+    align-items: center;
+    justify-content: center;   
+    gap: 0.5em;                
+    padding: 0.8em 1.2em;       
+    border-radius: 12px;        
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.action-btn .svg-wrapper {
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.action-btn span {
+    transition: opacity 0.3s ease;
+}
+
+.action-btn:hover {
+    background-color: #000;
+}
+
+.action-btn:hover .svg-wrapper {
+    transform: scale(1.2);
+}
+
+.action-btn:hover span {
+    opacity: 0.9;
+}
+
+.action-btn:active {
+    transform: scale(0.95);
+}
+
+
+.add-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 1em;
+}
+
+
+
+/* .submit-btn {
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--highlight);
+    color: var(--color-black);
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: var(--color-primary);
+    transform: translateY(-2px);
+} */
+
+.preview-image {
+    width: 100%;
+    margin: 16px 0;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.image-input {
+    margin-bottom: 12px;
+}
+
+.error {
+    color: #ff6b6b;
+    font-size: 13px;
+    margin-top: -5px;
+}

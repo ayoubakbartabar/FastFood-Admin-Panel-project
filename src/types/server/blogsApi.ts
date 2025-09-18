@@ -1,5 +1,7 @@
+// blogsApi.ts
 export const API_BASE_URL = "http://localhost:3001";
 
+// Types
 export interface BlogContentBlock {
   type: "paragraph" | "title" | "image";
   text?: string;
@@ -12,30 +14,36 @@ export interface Blog {
   content: BlogContentBlock[];
   categories: string;
   tags: string[];
-  createdAt?: string; // optional
+  createdAt?: string;
 }
 
-// Helper to convert image path to full URL
-const withFullImagePath = (blog: Blog): Blog => ({
+// Default headers for fetch
+const defaultHeaders: HeadersInit = {
+  "Content-Type": "application/json",
+};
+
+// Helper: Convert image path to full URL
+export const withFullImagePath = (blog: Blog): Blog => ({
   ...blog,
   image: blog.image.startsWith("http")
     ? blog.image
     : `${API_BASE_URL}${blog.image}`,
 });
 
+// API Functions
+
 // Fetch all blogs
 export const getBlogs = async (): Promise<Blog[]> => {
   try {
     const response = await fetch(`${API_BASE_URL}/blogs`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: defaultHeaders,
     });
 
     if (!response.ok)
-      throw new Error(`Failed to fetch blogs: ${response.status}`);
+      throw new Error(`Failed to fetch blogs: ${response.statusText}`);
 
     const data: Blog[] = await response.json();
-    // Map all images to full URL
     return data.map(withFullImagePath);
   } catch (error) {
     console.error("Error fetching blogs:", error);
@@ -43,12 +51,18 @@ export const getBlogs = async (): Promise<Blog[]> => {
   }
 };
 
-// Fetch single blog by id
+// Fetch single blog by ID
 export const getBlogById = async (id: string): Promise<Blog | null> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/blogs/${id}`);
+    const response = await fetch(`${API_BASE_URL}/blogs/${id}`, {
+      method: "GET",
+      headers: defaultHeaders,
+    });
 
-    if (!response.ok) throw new Error(`Failed to fetch blog with id ${id}`);
+    if (!response.ok)
+      throw new Error(
+        `Failed to fetch blog with id ${id}: ${response.statusText}`
+      );
 
     const data: Blog = await response.json();
     return withFullImagePath(data);
@@ -58,14 +72,14 @@ export const getBlogById = async (id: string): Promise<Blog | null> => {
   }
 };
 
-// Create new blog
+// Create a new blog
 export const createBlog = async (
   blog: Omit<Blog, "id" | "createdAt">
 ): Promise<Blog | null> => {
   try {
     const response = await fetch(`${API_BASE_URL}/blogs`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: defaultHeaders,
       body: JSON.stringify(blog),
     });
 
