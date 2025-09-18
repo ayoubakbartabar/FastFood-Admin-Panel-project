@@ -10,7 +10,7 @@ import type { FormikHelpers } from "formik";
 import { FaTrash, FaParagraph, FaImages } from "react-icons/fa";
 import { MdOutlineSubtitles } from "react-icons/md";
 
-import "./NewBlogSection.css";
+import "./NewBlogPage.css";
 
 // Validation Schema
 const BlogSchema = Yup.object().shape({
@@ -32,7 +32,9 @@ const BlogSchema = Yup.object().shape({
 // Main Component
 const NewBlogSection: React.FC = () => {
   const navigate = useNavigate();
+  const [filedValue, setFieldValue] = useState<string | null>(null);
 
+  
   const initialValues = {
     image: "",
     title: "",
@@ -69,8 +71,6 @@ const NewBlogSection: React.FC = () => {
       setSubmitting(false);
     }
   };
-
-  const [filedValue, setFieldValue] = useState<string | null>(null);
 
   return (
     <div className="new-blog-page">
@@ -249,7 +249,7 @@ const NewBlogSection: React.FC = () => {
               disabled={isSubmitting || !isValid}
               className="action-btn"
             >
-              Save
+              Create
             </button>
           </Form>
         )}

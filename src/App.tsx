@@ -3,8 +3,9 @@ import { Routes, Route } from "react-router-dom";
 
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import ProductPage from "./pages/ProductPage/ProductPage";
-import NewBlogSection from "./pages/NewBlogSection/NewBlogSection";
+import NewBlogPage from "./pages/NewBlogPage/NewBlogPage";
 import UserOrderPage from "./pages/UserOrderPage/UserOrderPage";
+import EditBlogPage from "./pages/EditBlogPage/EditBlogPage";
 
 const App: React.FC = () => {
   return (
@@ -16,8 +17,8 @@ const App: React.FC = () => {
       <Route path="/ProductPage" element={<ProductPage />} />
 
       {/* New blog creation page */}
-      <Route path="/new-blog" element={<NewBlogSection />} />
-      {/* <Route path="/new-blog/:id" element={<NewBlogSection />} /> */}
+      <Route path="/new-blog" element={<NewBlogPage />} />
+      <Route path="/edit-blog/:id" element={<EditBlogPage />} />
 
       {/* ,User Order creation page */}
       <Route path="/user-order/:id" element={<UserOrderPage />} />

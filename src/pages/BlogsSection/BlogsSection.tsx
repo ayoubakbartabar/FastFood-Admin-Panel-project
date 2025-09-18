@@ -68,7 +68,7 @@ const BlogsSection: React.FC = () => {
                   )}
 
                   {/* Edit Blog */}
-                  <Link to={`/new-blog/${blog.id}`} className="edit-blog">
+                  <Link to={`/edit-blog/${blog.id}`} className="edit-blog">
                     Edit Blog <MdOutlineArrowRightAlt className="arrow" />
                   </Link>
                 </div>
