@@ -1,0 +1,133 @@
+.home-page-blog-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    padding: 0 10px;
+}
+
+/* Blog Card */
+.blog-card {
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.blog-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.blog-content {
+    padding: 1rem 1.25rem;
+}
+
+.blog-category {
+    color: #888;
+    margin: 1rem 0;
+    display: block;
+}
+
+.blog-title {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #1a1a1a;
+}
+
+.blog-paragraph {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+.edit-blog {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: #000;
+    position: relative;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.edit-blog:hover {
+    color: var(--color-star-yellow);
+    transform: scale(1.05);
+}
+
+.edit-blog .arrow {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.edit-blog:hover .arrow {
+    transform: translateX(6px);
+}
+
+.edit-blog::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: var(--color-star-yellow);
+    transition: width 0.3s ease;
+}
+
+.edit-blog:hover::after {
+    width: 100%;
+}
+
+
+/* Skeleton Cards */
+.skeleton-card {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.skeleton-image {
+    width: 100%;
+    height: 200px;
+    background-color: #ddd;
+}
+
+.skeleton-content {
+    padding: 1rem 1.25rem;
+}
+
+.skeleton-line {
+    height: 16px;
+    margin-bottom: 0.5rem;
+    background-color: #ddd;
+    border-radius: 4px;
+}
+
+.skeleton-line.short {
+    width: 40%;
+}
+
+.skeleton-line.medium {
+    width: 70%;
+}
+
+.skeleton-line.long {
+    width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .blog-title {
+        font-size: 1rem;
+    }
+
+    .blog-paragraph {
+        font-size: 0.9rem;
+    }
+}

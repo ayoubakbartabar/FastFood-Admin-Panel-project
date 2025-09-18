@@ -1,0 +1,95 @@
+/* Grid container for all order cards */
+.order-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
+  gap: 1.5rem; /* Spacing between cards */
+}
+
+/* Single card container */
+.user-order-box-container {
+  width: 100%; /* Take full width of the grid cell */
+  max-width: 320px; /* Limit maximum width for better design */
+  background: #fff480; /* Card background color */
+  color: black;
+  position: relative;
+  border-radius: 2.5em;
+  padding: 2em;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+/* Inner content of the card */
+.user-order-box-container .card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5em;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+/* Top & bottom sections inside the card */
+.user-order-box-container .card-top,
+.user-order-box-container .card-bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Card text styling */
+.user-order-box-container .card-top p,
+.user-order-box-container .card-top .card-title,
+.user-order-box-container .card-bottom p,
+.user-order-box-container .card-bottom .card-title {
+  margin: 0;
+}
+
+/* Title font weight */
+.user-order-box-container .card-title {
+  font-weight: bold;
+}
+
+/* Bottom section alignment */
+.user-order-box-container .card-bottom {
+  align-items: flex-end;
+}
+
+/* Background icon inside the card */
+.user-order-box-container .card-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none; /* Prevent blocking clicks */
+}
+
+.user-order-box-container .card-image svg {
+  width: 4em;
+  height: 4em;
+  opacity: 0.15; /* Faded background effect */
+  transition: transform 0.3s ease;
+}
+
+/* Hover effect for card */
+.user-order-box-container:hover {
+  cursor: pointer;
+  transform: translateY(-5px); /* Slight lift */
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+}
+
+/* Hover effect for card content */
+.user-order-box-container:hover .card-content {
+  transform: scale(0.96);
+}
+
+/* Hover effect for background icon */
+.user-order-box-container:hover .card-image svg {
+  transform: scale(1.05);
+}
+
+/* Active click effect */
+.user-order-box-container:active {
+  transform: scale(0.9);
+}
