@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ProductCartSection.css";
+import AddBlogCard from "../../../pages/BlogsSection/BlogSectionCom/AddBlogCard/AddBlogCard";
 
 // Product type definition
 export interface Product {
@@ -29,10 +30,7 @@ const ProductCard: React.FC<ProductCardProps> = memo(({ product }) => {
   };
 
   return (
-    <div
-      className="product-card"
-      onClick={handleClick}
-    >
+    <div className="product-card" onClick={handleClick}>
       <div className="product-image-wrapper">
         <img
           src={product.image}
@@ -86,6 +84,7 @@ const ProductCartSection: React.FC<ProductCartSectionProps> = memo(
       <div className="product-card-section">
         <h2>Products</h2>
         <div className="products-grid">
+          <AddBlogCard to="new-product" />
           {products.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}

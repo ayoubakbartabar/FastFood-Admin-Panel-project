@@ -40,7 +40,7 @@ const BlogsSection: React.FC = () => {
   return (
     <div className="home-page-blog-grid">
       {/* Add new blog card */}
-      <AddBlogCard />
+      <AddBlogCard to="new-blog"/>
 
       {/* Skeletons */}
       {loading

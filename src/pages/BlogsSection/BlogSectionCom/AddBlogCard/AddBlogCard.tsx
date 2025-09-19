@@ -2,13 +2,18 @@ import React from "react";
 import { MdAdd } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import "./AddBlogCart.css";
+import { string } from "yup";
 
-const AddBlogCard: React.FC = () => {
+interface AddCardProp {
+  to: string;
+}
+
+const AddBlogCard: React.FC<AddCardProp> = ({to}) => {
   const navigate = useNavigate();
 
   // Navigate to new blog page on click
   const handleClick = () => {
-    navigate("/new-blog");
+    navigate(to);
   };
 
   return (

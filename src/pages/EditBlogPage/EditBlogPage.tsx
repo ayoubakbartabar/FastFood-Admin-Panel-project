@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Formik, Form, FieldArray, ErrorMessage } from "formik";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { getBlogById, updateBlog } from "../../types/server/blogsApi";
 import type { Blog } from "../../types/server/blogsApi";
@@ -11,7 +11,6 @@ import { FaTrash, FaParagraph, FaImages } from "react-icons/fa";
 import { MdOutlineSubtitles } from "react-icons/md";
 
 const EditBlogPage: React.FC = () => {
-
   const { id: blogId } = useParams<{ id: string }>();
   const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
@@ -36,7 +35,7 @@ const EditBlogPage: React.FC = () => {
     try {
       await updateBlog(values);
       alert("Blog updated successfully!");
-      navigate("/")
+      navigate("/");
     } catch (error) {
       console.error("Failed to update blog:", error);
       alert("Failed to update blog.");

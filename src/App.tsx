@@ -6,6 +6,7 @@ import ProductPage from "./pages/ProductPage/ProductPage";
 import NewBlogPage from "./pages/NewBlogPage/NewBlogPage";
 import UserOrderPage from "./pages/UserOrderPage/UserOrderPage";
 import EditBlogPage from "./pages/EditBlogPage/EditBlogPage";
+import NewProductPage from "./pages/NewProductPage/NewProductPage";
 
 const App: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const App: React.FC = () => {
 
       {/* Product page */}
       <Route path="/ProductPage" element={<ProductPage />} />
+      <Route path="/new-product" element={<NewProductPage />} />
 
       {/* New blog creation page */}
       <Route path="/new-blog" element={<NewBlogPage />} />
