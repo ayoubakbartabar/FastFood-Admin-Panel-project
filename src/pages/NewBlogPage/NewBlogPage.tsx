@@ -4,7 +4,7 @@ import { Formik, Form, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import { createBlog } from "../../types/server/blogsApi";
-import type { Blog, BlogContentBlock } from "../../types/server/blogsApi";
+import type { Blog } from "../../types/server/blogsApi";
 import type { FormikHelpers } from "formik";
 
 import { FaTrash, FaParagraph, FaImages } from "react-icons/fa";
@@ -15,7 +15,6 @@ import "./NewBlogPage.css";
 // Validation Schema
 const BlogSchema = Yup.object().shape({
   image: Yup.string().required("Image is required"),
-
   title: Yup.string().required("Title is required"),
   categories: Yup.string().required("Category is required"),
   tags: Yup.string(),
@@ -34,7 +33,7 @@ const NewBlogSection: React.FC = () => {
   const navigate = useNavigate();
   const [filedValue, setFieldValue] = useState<string | null>(null);
 
-  
+  // Initial form values
   const initialValues = {
     image: "",
     title: "",
@@ -43,6 +42,7 @@ const NewBlogSection: React.FC = () => {
     content: [{ type: "paragraph", text: "" }],
   };
 
+  // Form submit handler
   const handleSubmit = async (
     values: typeof initialValues,
     { setSubmitting, resetForm }: FormikHelpers<typeof initialValues>
@@ -89,35 +89,49 @@ const NewBlogSection: React.FC = () => {
           setFieldValue,
         }) => (
           <Form className="blog-form">
-            {/* Image URL */}
-            <div>
-              {values.image && (
-                <img
-                  src={values.image as string}
-                  alt="Preview"
-                  className="preview-image"
-                />
+            {/* Image Upload Section*/}
+            <div className="image-upload-container">
+              {values.image ? (
+                // Image Preview with Remove button
+                <div className="image-preview-wrapper">
+                  <img
+                    src={values.image as string}
+                    alt="Preview"
+                    className="image-preview"
+                  />
+                  <button
+                    type="button"
+                    className="remove-image-btn"
+                    onClick={() => setFieldValue("image", "")}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                // Custom Upload Button
+                <label className="custom-file-upload">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    name="image"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () =>
+                          setFieldValue("image", reader.result);
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                  Upload Image
+                </label>
               )}
-              <input
-                type="file"
-                accept="image/*"
-                name="image"
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                      setFieldValue("image", reader.result);
-                    };
-                    reader.readAsDataURL(file);
-                  }
-                }}
-              />
               <ErrorMessage name="image" component="div" className="error" />
             </div>
 
-            {/* Title */}
-            <div>
+            {/* Title Input*/}
+            <div className="input-group">
               <input
                 name="title"
                 placeholder="Title"
@@ -128,8 +142,8 @@ const NewBlogSection: React.FC = () => {
               <ErrorMessage name="title" component="div" className="error" />
             </div>
 
-            {/* Categories */}
-            <div>
+            {/* Category Input*/}
+            <div className="input-group">
               <input
                 name="categories"
                 placeholder="Category"
@@ -144,8 +158,8 @@ const NewBlogSection: React.FC = () => {
               />
             </div>
 
-            {/* Tags */}
-            <div>
+            {/* Tags Input*/}
+            <div className="input-group">
               <input
                 name="tags"
                 placeholder="Tags (comma separated)"
@@ -155,13 +169,14 @@ const NewBlogSection: React.FC = () => {
               />
             </div>
 
-            {/* Content Blocks */}
+            {/* Content Blocks Section*/}
             <h3 className="input-title">Content:</h3>
             <FieldArray name="content">
               {({ push, remove }) => (
                 <div>
                   {values.content.map((block, idx) => (
                     <div key={idx} className="content-block">
+                      {/* Select block type */}
                       <select
                         name={`content[${idx}].type`}
                         value={block.type}
@@ -173,6 +188,7 @@ const NewBlogSection: React.FC = () => {
                         <option value="image">Image</option>
                       </select>
 
+                      {/* Textarea for paragraph/title */}
                       {(block.type === "paragraph" ||
                         block.type === "title") && (
                         <textarea
@@ -182,6 +198,7 @@ const NewBlogSection: React.FC = () => {
                           value={block.text}
                           onChange={(e) => {
                             handleChange(e);
+                            // Auto resize textarea
                             e.target.style.height = "auto";
                             e.target.style.height = `${
                               e.target.scrollHeight + 6
@@ -191,6 +208,7 @@ const NewBlogSection: React.FC = () => {
                         />
                       )}
 
+                      {/* Input for image URL */}
                       {block.type === "image" && (
                         <input
                           name={`content[${idx}].text`}
@@ -207,6 +225,7 @@ const NewBlogSection: React.FC = () => {
                         className="error"
                       />
 
+                      {/* Remove content block button */}
                       <button
                         className="action-btn"
                         type="button"
@@ -217,6 +236,7 @@ const NewBlogSection: React.FC = () => {
                     </div>
                   ))}
 
+                  {/* Buttons to add content blocks */}
                   <div className="add-buttons">
                     <button
                       className="action-btn"
@@ -244,10 +264,11 @@ const NewBlogSection: React.FC = () => {
               )}
             </FieldArray>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isSubmitting || !isValid}
-              className="action-btn"
+              className="action-btn submit-btn"
             >
               Create
             </button>
