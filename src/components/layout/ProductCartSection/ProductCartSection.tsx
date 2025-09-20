@@ -1,18 +1,9 @@
 import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
-import "./ProductCartSection.css";
 import AddBlogCard from "../../../pages/BlogsSection/BlogSectionCom/AddBlogCard/AddBlogCard";
-
-// Product type definition
-export interface Product {
-  id: number;
-  title: string;
-  price: number;
-  image: string;
-  category: string;
-  count: number;
-  sku?: string;
-}
+import { API_BASE_URL } from "../../../types/server/productApi";
+import type { Product } from "../../../types/server/productApi";
+import "./ProductCartSection.css";
 
 // Props for single product card
 interface ProductCardProps {
@@ -20,27 +11,37 @@ interface ProductCardProps {
 }
 
 // Individual Product Card Component
-// Memoized for performance optimization
 const ProductCard: React.FC<ProductCardProps> = memo(({ product }) => {
   const navigate = useNavigate();
 
-  // Navigate to product detail page on click
   const handleClick = () => {
     navigate("/ProductPage", { state: { product } });
   };
 
+  const imageSrc = product.image.startsWith("http")
+    ? product.image
+    : `${API_BASE_URL}${product.image}`;
+
   return (
-    <div className="product-card" onClick={handleClick}>
-      <div className="product-image-wrapper">
+    <div className="product-cart-section-card" onClick={handleClick}>
+      <div className="product-cart-section-card-image-wrapper">
         <img
-          src={product.image}
+          src={imageSrc}
           alt={product.title}
           loading="lazy"
-          className="product-card-image"
+          className="product-cart-section-card-image"
         />
       </div>
-      <div className="product-details">
-        <h3>{product.title}</h3>
+
+      <div className="product-cart-section-card-details">
+        <h3 className="product-cart-section-card-title">{product.title}</h3>
+        <p className="product-cart-section-card-price">
+          ${product.price.toFixed(2)}
+        </p>
+        <p className="product-cart-section-card-category">{product.category}</p>
+        <p className="product-cart-section-card-stock">
+          Stock: {product.count}
+        </p>
       </div>
     </div>
   );
@@ -53,40 +54,53 @@ interface ProductCartSectionProps {
 }
 
 // Main ProductCartSection Component
-// Memoized for performance
 const ProductCartSection: React.FC<ProductCartSectionProps> = memo(
   ({ products, loading = false }) => {
-    // Loading state with Skeleton Loader
+    // Loading skeletons
     if (loading) {
       return (
-        <div className="products-grid">
-          {Array.from({ length: 6 }).map((_, idx) => (
-            <div key={idx} className="product-card skeleton">
-              <div className="product-image-wrapper" />
-              <div className="product-details">
-                <div className="skeleton-line short" />
-                <div className="skeleton-line" />
-                <div className="skeleton-line" />
+        <div className="product-cart-section-container">
+          <div className="product-cart-section-grid">
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="product-cart-section-card product-cart-section-card-skeleton"
+              >
+                <div className="product-cart-section-card-image-wrapper" />
+                <div className="product-cart-section-card-details">
+                  <div className="product-cart-section-skeleton-line product-cart-section-skeleton-line-short" />
+                  <div className="product-cart-section-skeleton-line" />
+                  <div className="product-cart-section-skeleton-line" />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       );
     }
 
     // No products fallback
     if (!products || products.length === 0) {
-      return <div className="no-products">No products available</div>;
+      return (
+        <div className="product-cart-section-container">
+          <div className="product-cart-section-no-products">
+            No products available
+          </div>
+        </div>
+      );
     }
 
     // Render Product Grid
     return (
-      <div className="product-card-section">
-        <h2>Products</h2>
-        <div className="products-grid">
+      <div className="product-cart-section-container">
+        <h2 className="product-cart-section-title">Products</h2>
+        <div className="product-cart-section-grid">
+          {/* Add new product card */}
           <AddBlogCard to="new-product" />
-          {products.map((p) => (
-            <ProductCard key={p.id} product={p} />
+
+          {/* Render each product card */}
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </div>

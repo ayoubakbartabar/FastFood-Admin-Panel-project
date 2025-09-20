@@ -12,9 +12,7 @@ import "./OrderSection.css";
 const OrderSection = () => {
   const [usersWithOrders, setUsersWithOrders] = useState<UserOrders[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useNavigate()
-
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch all users who have at least one order
@@ -35,7 +33,11 @@ const OrderSection = () => {
   return (
     <div className="order-section">
       {usersWithOrders.map((user) => (
-        <div key={user.id} className="user-order-box-container" onClick={()=>navigate(`./user-order/${user.id}`)}>
+        <div
+          key={user.id}
+          className="user-order-box-container"
+          onClick={() => navigate(`./user-order/${user.id}`)}
+        >
           {/* Card content area */}
           <div className="card-content">
             <div className="card-top">

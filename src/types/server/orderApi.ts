@@ -1,8 +1,5 @@
 import axios from "axios";
 
-// -----------------------------
-// Define types for CartItem and Order
-// -----------------------------
 export interface CartItem {
   id: string; // Unique ID of the item
   image: string; // Image URL or path of the item
@@ -31,19 +28,15 @@ export interface UserOrders {
   orders: Order[]; // Array of orders
 }
 
-// -----------------------------
 // Axios instance setup
-// -----------------------------
 const API_BASE_URL = "http://localhost:3001"; // API base URL
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: { "Content-Type": "application/json" },
 });
 
-// -----------------------------
 // Fetch all users who have at least one order
 // @returns Array of UserOrders
-// -----------------------------
 export const getAllUsersWithOrders = async (): Promise<UserOrders[]> => {
   try {
     // Fetch all users from API

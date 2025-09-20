@@ -10,9 +10,8 @@ import { MdOutlineSubtitles } from "react-icons/md";
 
 import "./EditBlogPage.css";
 
-//
+
 // Main Edit Blog Page
-//
 const EditBlogPage: React.FC = () => {
   const { id: blogId } = useParams<{ id: string }>();
   const [blog, setBlog] = useState<Blog | null>(null);

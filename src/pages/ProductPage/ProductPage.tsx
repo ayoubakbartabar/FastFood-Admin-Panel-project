@@ -1,12 +1,17 @@
 import React, { memo, useCallback, useState } from "react";
 import { useLocation } from "react-router-dom";
-import type { Product } from "../../types/server/productApi";
+import { useNavigate } from "react-router-dom";
+
 import { Formik, Form, Field, ErrorMessage } from "formik";
+
 import * as Yup from "yup";
+
 import { updateProduct, API_BASE_URL } from "../../types/server/productApi";
+import type { Product } from "../../types/server/productApi";
+
 import "./ProductPage.css";
 
-// Validation schema using Yup
+// Validation Schema
 const ProductSchema = Yup.object().shape({
   image: Yup.string().required("Image is required"),
   title: Yup.string().required("Title is required"),
@@ -24,12 +29,14 @@ const ProductSchema = Yup.object().shape({
     .required("Star rating is required"),
 });
 
+// Main Component
 const ProductPage: React.FC = memo(() => {
-  // Get product data from router location state
+  // Get product data from router location
   const location = useLocation();
   const product: Product | undefined = location.state?.product;
 
-  // State for image preview (used when user uploads a new image)
+  const navigate = useNavigate();
+  // State for image preview
   const [preview, setPreview] = useState<string | null>(
     product?.image
       ? product.image.startsWith("http")
@@ -38,47 +45,31 @@ const ProductPage: React.FC = memo(() => {
       : null
   );
 
-  // If product data is missing, show fallback message
-  if (!product) return <div>Product not found.</div>;
+  // Show message if product not found
+  if (!product)
+    return <div className="product-page__not-found">Product not found.</div>;
 
-  // Submit handler for updating product
+  // Handle form submit to update product
   const handleUpdate = useCallback(async (values: Product) => {
     try {
       if (!values.id) {
         alert("Product ID is missing!");
         return;
       }
-
-      console.log("Sending to API:", values);
-
       const result = await updateProduct(values);
-
-      if (result) {
-        alert("Product updated successfully!");
-        console.log("Updated product:", result);
-      } else {
-        alert("Failed to update product.");
-      }
+      if (result) alert("Product updated successfully!");
+      else alert("Failed to update product.");
     } catch (error) {
       console.error("Error updating product:", error);
       alert("An error occurred while updating the product.");
     }
+    navigate("/");
   }, []);
 
   return (
-    <div className="product-page">
-      <h1>Edit Product</h1>
+    <div className="product-page-elem">
+      <h1 className="product-page-elem__title">Edit Product</h1>
 
-      {/* Product image preview */}
-      {preview && (
-        <img
-          src={preview}
-          alt={product.title}
-          className="product-image-preview"
-        />
-      )}
-
-      {/* Formik form for product editing */}
       <Formik
         initialValues={{
           id: product.id,
@@ -95,76 +86,172 @@ const ProductPage: React.FC = memo(() => {
         enableReinitialize
       >
         {({ isSubmitting, setFieldValue }) => (
-          <Form className="product-form">
-            {/* Image upload field */}
-            <label>
-              Image:
-              <input
-                type="file"
-                accept="image/*"
+          <Form className="product-page-elem__form">
+            {/* Image Upload */}
+            <div className="product-page-elem__form-group product-page-elem__image-upload">
+              <label className="product-page-elem__label">Product Image:</label>
+
+              <div className="product-page-elem__image-box">
+                {preview ? (
+                  <>
+                    <img
+                      src={preview}
+                      alt="Preview"
+                      className="product-page-elem__preview-img"
+                    />
+                    <button
+                      type="button"
+                      className="product-page-elem__remove-btn"
+                      onClick={() => {
+                        setPreview(null);
+                        setFieldValue("image", "");
+                      }}
+                    >
+                      Remove
+                    </button>
+                  </>
+                ) : (
+                  <label className="product-page-elem__upload-btn">
+                    Upload Image
+                    <input
+                      type="file"
+                      accept="image/*"
+                      name="image"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setFieldValue("image", reader.result as string);
+                            setPreview(reader.result as string);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </label>
+                )}
+              </div>
+
+              <ErrorMessage
                 name="image"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                      setFieldValue("image", reader.result as string);
-                      setPreview(reader.result as string); // update preview
-                    };
-                    reader.readAsDataURL(file);
-                  }
-                }}
+                component="div"
+                className="product-page-elem__error"
               />
-              <ErrorMessage name="image" component="div" className="error" />
-            </label>
+            </div>
 
-            {/* Title field */}
-            <label>
-              Title:
-              <Field type="text" name="title" />
-              <ErrorMessage name="title" component="div" className="error" />
-            </label>
+            {/* Title */}
+            <div className="product-page-elem__form-group">
+              <label className="product-page-elem__label">
+                Title:
+                <Field
+                  type="text"
+                  name="title"
+                  className="product-page-elem__input"
+                />
+              </label>
+              <ErrorMessage
+                name="title"
+                component="div"
+                className="product-page-elem__error"
+              />
+            </div>
 
-            {/* Price field */}
-            <label>
-              Price:
-              <Field type="number" name="price" step="0.01" />
-              <ErrorMessage name="price" component="div" className="error" />
-            </label>
+            {/* Price */}
+            <div className="product-page-elem__form-group">
+              <label className="product-page-elem__label">
+                Price:
+                <Field
+                  type="number"
+                  name="price"
+                  step="0.01"
+                  className="product-page-elem__input"
+                />
+              </label>
+              <ErrorMessage
+                name="price"
+                component="div"
+                className="product-page-elem__error"
+              />
+            </div>
 
-            {/* Category field */}
-            <label>
-              Category:
-              <Field type="text" name="category" />
-              <ErrorMessage name="category" component="div" className="error" />
-            </label>
+            {/* Category */}
+            <div className="product-page-elem__form-group">
+              <label className="product-page-elem__label">
+                Category:
+                <Field
+                  type="text"
+                  name="category"
+                  className="product-page-elem__input"
+                />
+              </label>
+              <ErrorMessage
+                name="category"
+                component="div"
+                className="product-page-elem__error"
+              />
+            </div>
 
-            {/* SKU field */}
-            <label>
-              SKU:
-              <Field type="text" name="sku" />
-              <ErrorMessage name="sku" component="div" className="error" />
-            </label>
+            {/* SKU */}
+            <div className="product-page-elem__form-group">
+              <label className="product-page-elem__label">
+                SKU:
+                <Field
+                  type="text"
+                  name="sku"
+                  className="product-page-elem__input"
+                />
+              </label>
+              <ErrorMessage
+                name="sku"
+                component="div"
+                className="product-page-elem__error"
+              />
+            </div>
 
-            {/* Stock count field */}
-            <label>
-              Stock Count:
-              <Field type="number" name="count" step="1" />
-              <ErrorMessage name="count" component="div" className="error" />
-            </label>
+            {/* Stock Count */}
+            <div className="product-page-elem__form-group">
+              <label className="product-page-elem__label">
+                Stock Count:
+                <Field
+                  type="number"
+                  name="count"
+                  step="1"
+                  className="product-page-elem__input"
+                />
+              </label>
+              <ErrorMessage
+                name="count"
+                component="div"
+                className="product-page-elem__error"
+              />
+            </div>
 
-            {/* Star rating field */}
-            <label>
-              Star Rating (0-5):
-              <Field type="number" name="star" min={0} max={5} step="0.01" />
-              <ErrorMessage name="star" component="div" className="error" />
-            </label>
+            {/* Star Rating */}
+            <div className="product-page-elem__form-group">
+              <label className="product-page-elem__label">
+                Star Rating (0-5):
+                <Field
+                  type="number"
+                  name="star"
+                  min={0}
+                  max={5}
+                  step="0.01"
+                  className="product-page-elem__input"
+                />
+              </label>
+              <ErrorMessage
+                name="star"
+                component="div"
+                className="product-page-elem__error"
+              />
+            </div>
 
-            {/* Submit button */}
+            {/* Submit */}
             <button
-              className="update-btn"
               type="submit"
               disabled={isSubmitting}
+              className="product-page-elem__btn"
             >
               {isSubmitting ? "Updating..." : "Update"}
             </button>

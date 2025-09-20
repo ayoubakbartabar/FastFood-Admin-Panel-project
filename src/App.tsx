@@ -7,6 +7,7 @@ import NewBlogPage from "./pages/NewBlogPage/NewBlogPage";
 import UserOrderPage from "./pages/UserOrderPage/UserOrderPage";
 import EditBlogPage from "./pages/EditBlogPage/EditBlogPage";
 import NewProductPage from "./pages/NewProductPage/NewProductPage";
+import OrderInvoicePageWrapper from "./pages/OrderInvoicePage/OrderInvoicePageWrapper";
 
 const App: React.FC = () => {
   return (
@@ -24,6 +25,11 @@ const App: React.FC = () => {
 
       {/* ,User Order creation page */}
       <Route path="/user-order/:id" element={<UserOrderPage />} />
+
+      <Route
+        path="/orders/:userId/:orderId"
+        element={<OrderInvoicePageWrapper />}
+      />
     </Routes>
   );
 };
