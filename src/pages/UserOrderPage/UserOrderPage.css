@@ -1,0 +1,143 @@
+/* ------------------------
+   Orders Container
+-------------------------*/
+.orders-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+/* ------------------------
+   Single Order Box
+-------------------------*/
+.order-box {
+    background: var(--color-white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.order-box:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    border-color: var(--color-primary);
+}
+
+/* ------------------------
+   Headings & Info
+-------------------------*/
+.order-box h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--heading);
+    margin-bottom: 0.5rem;
+}
+
+.order-box p {
+    font-size: 1rem;
+    color: var(--paragraph);
+    margin: 0.25rem 0;
+}
+
+/* ------------------------
+   Items List
+-------------------------*/
+.order-items {
+    margin-top: 1rem;
+    list-style: none;
+    padding: 0;
+}
+
+.order-items li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s ease;
+}
+
+.order-items li:hover {
+    background: var(--background);
+    border-radius: 8px;
+}
+
+.order-items img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.order-items img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* ------------------------
+   Print Button
+-------------------------*/
+.print-btn {
+    margin-top: 1rem;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    padding: 0.65rem 1.25rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.print-btn:hover {
+    background: var(--highlight);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+/* ------------------------
+   Responsive
+-------------------------*/
+@media (max-width: 768px) {
+    .order-box {
+        padding: 1.25rem;
+    }
+
+    .order-box h3 {
+        font-size: 1.25rem;
+    }
+
+    .order-items img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .print-btn {
+        width: 100%;
+        text-align: center;
+        padding: 0.75rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .order-box {
+        padding: 1rem;
+    }
+
+    .order-box h3 {
+        font-size: 1.1rem;
+    }
+
+    .order-items {
+        gap: 0.5rem;
+    }
+
+    .order-items img {
+        width: 35px;
+        height: 35px;
+    }
+}

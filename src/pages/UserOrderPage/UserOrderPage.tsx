@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-
+import { useParams, Link } from "react-router-dom";
 import { getAllUsersWithOrders } from "../../types/server/orderApi";
-import type { Order, UserOrders } from "../../types/server/orderApi";
+import type { UserOrders, Order } from "../../types/server/orderApi";
 
 import "./UserOrderPage.css";
 
 function UserOrderPage() {
   const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<UserOrders | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch all users who have at least one order
     getAllUsersWithOrders()
       .then((data) => {
-        const foundUser = data.find(
-          (user: UserOrders) => user.id.toString() === id
-        );
+        const foundUser = data.find((u) => u.id === id);
         setUser(foundUser || null);
         setLoading(false);
       })
@@ -25,41 +21,33 @@ function UserOrderPage() {
         console.error("Failed to fetch orders:", err);
         setLoading(false);
       });
-  }, []);
+  }, [id]);
 
   if (loading) return <p>Loading orders...</p>;
-
   if (!user) return <p>No orders found</p>;
+
   return (
-    // <div>UserOrderPage</div>
-    <div>
-      {user?.orders.map((order: Order) => (
-        <div key={user.id} style={{ marginBottom: 30 }}>
-          {user.orders.map((order: Order) => (
-            <div
-              key={order.id}
-              style={{ border: "1px solid #ccc", margin: 10, padding: 10 }}
-            >
-              <h4>Order ID: {order.id}</h4>
-              <p>Subtotal: ${order.subtotal}</p>
-              <p>Total: ${order.total}</p>
-              <p>Date: {new Date(order.date).toLocaleString()}</p>
-              <h5>Items:</h5>
-              <ul>
-                {order.items.map((item) => (
-                  <li
-                    key={item.id}
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
-                    <img src={item.image} alt={item.title} width={50} />
-                    <span>
-                      {item.title} x {item.quantity} (${item.price})
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+    <div className="orders-container">
+      {user.orders.map((order: Order) => (
+        <div key={order.id} className="order-box">
+          <h3>Order ID: {order.id}</h3>
+          <p>Subtotal: ${order.subtotal}</p>
+          <p>Total: ${order.total}</p>
+          <p>Date: {new Date(order.date).toLocaleString()}</p>
+
+          <h4>Items:</h4>
+          <ul className="order-items">
+            {order.items.map((item) => (
+              <li key={item.id}>
+                <img src={item.image} alt={item.title} />
+                {item.title} x {item.quantity} (${item.price})
+              </li>
+            ))}
+          </ul>
+
+          <Link to={`/orders/${user.id}/${order.id}`}>
+            <button className="print-btn">Print Invoice</button>
+          </Link>
         </div>
       ))}
     </div>
