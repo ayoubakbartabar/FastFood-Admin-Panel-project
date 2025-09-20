@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useParams } from "react-router-dom";
 import { Formik, Form, FieldArray, ErrorMessage } from "formik";
-import { useParams } from "react-router-dom";
 
 import { getBlogById, updateBlog } from "../../types/server/blogsApi";
 import type { Blog } from "../../types/server/blogsApi";
@@ -10,6 +8,11 @@ import type { Blog } from "../../types/server/blogsApi";
 import { FaTrash, FaParagraph, FaImages } from "react-icons/fa";
 import { MdOutlineSubtitles } from "react-icons/md";
 
+import "./EditBlogPage.css";
+
+//
+// Main Edit Blog Page
+//
 const EditBlogPage: React.FC = () => {
   const { id: blogId } = useParams<{ id: string }>();
   const [blog, setBlog] = useState<Blog | null>(null);
@@ -17,6 +20,7 @@ const EditBlogPage: React.FC = () => {
 
   const navigate = useNavigate();
 
+  // Fetch blog by id on component mount
   useEffect(() => {
     if (!blogId) return;
 
@@ -30,6 +34,7 @@ const EditBlogPage: React.FC = () => {
     fetchBlog();
   }, [blogId]);
 
+  // Submit handler
   const handlerSubmit = async (values: Blog) => {
     if (!blogId) return;
     try {
@@ -46,7 +51,7 @@ const EditBlogPage: React.FC = () => {
   if (!blog) return <p>No blog found.</p>;
 
   return (
-    <div className="new-blog-page">
+    <div className="edit-blog-page">
       <h1 className="form-title">Edit Blog</h1>
 
       <Formik enableReinitialize initialValues={blog} onSubmit={handlerSubmit}>
@@ -57,35 +62,48 @@ const EditBlogPage: React.FC = () => {
           setFieldValue,
           isSubmitting,
         }) => (
-          <Form className="blog-form">
-            {/* Blog Image */}
-            <div>
-              {values.image && (
-                <img
-                  src={values.image}
-                  alt="Preview"
-                  className="preview-image"
-                />
+          <Form className="edit-blog-form">
+            {/* Image Upload Section*/}
+            <div className="image-upload-container">
+              {values.image ? (
+                <div className="image-preview-wrapper">
+                  <img
+                    src={values.image}
+                    alt="Preview"
+                    className="image-preview"
+                  />
+                  <button
+                    type="button"
+                    className="remove-image-btn"
+                    onClick={() => setFieldValue("image", "")}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                <label className="custom-file-upload">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    name="image"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () =>
+                          setFieldValue("image", reader.result as string);
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                  Upload Image
+                </label>
               )}
-              <input
-                type="file"
-                accept="image/*"
-                name="image"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () =>
-                      setFieldValue("image", reader.result as string);
-                    reader.readAsDataURL(file);
-                  }
-                }}
-              />
               <ErrorMessage name="image" component="div" className="error" />
             </div>
 
-            {/* Title */}
-            <div>
+            {/* Title Input*/}
+            <div className="input-group">
               <input
                 name="title"
                 placeholder="Title"
@@ -96,8 +114,8 @@ const EditBlogPage: React.FC = () => {
               <ErrorMessage name="title" component="div" className="error" />
             </div>
 
-            {/* Categories */}
-            <div>
+            {/* Category Input*/}
+            <div className="input-group">
               <input
                 name="categories"
                 placeholder="Category"
@@ -112,8 +130,8 @@ const EditBlogPage: React.FC = () => {
               />
             </div>
 
-            {/* Tags */}
-            <div>
+            {/* Tags Input*/}
+            <div className="input-group">
               <input
                 name="tags"
                 placeholder="Tags (comma separated)"
@@ -128,7 +146,7 @@ const EditBlogPage: React.FC = () => {
               />
             </div>
 
-            {/* Content Blocks */}
+            {/* Content Blocks*/}
             <h3 className="input-title">Content:</h3>
             <FieldArray name="content">
               {({ push, remove }) => (
@@ -216,11 +234,10 @@ const EditBlogPage: React.FC = () => {
                 </div>
               )}
             </FieldArray>
-
             <button
               type="submit"
               disabled={isSubmitting}
-              className="action-btn"
+              className="action-btn submit-btn"
             >
               Save
             </button>

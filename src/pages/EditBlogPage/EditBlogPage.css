@@ -1,0 +1,190 @@
+/*Main Container*/
+.edit-blog-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    background-color: var(--color-white);
+}
+
+/*Form Styling*/
+.edit-blog-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    max-width: 600px;
+    padding: 30px;
+    border-radius: 16px;
+    background-color: var(--secondary);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+/*Inputs*/
+.edit-blog-form input,
+.edit-blog-form textarea,
+.edit-blog-form select {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    outline: none;
+    font-size: 15px;
+    font-family: var(--font-jost);
+    transition: all 0.3s ease;
+    background-color: var(--color-white);
+    color: var(--heading);
+}
+
+.edit-blog-form input::placeholder,
+.edit-blog-form textarea::placeholder,
+.edit-blog-form select option {
+    color: var(--color-gray-light);
+}
+
+.edit-blog-form input:focus,
+.edit-blog-form textarea:focus,
+.edit-blog-form select:focus {
+    border-color: var(--highlight);
+    box-shadow: 0 0 8px var(--color-primary);
+    z-index: 10;
+}
+
+textarea.textarea-input {
+    resize: none;
+    overflow: hidden;
+    min-height: 120px;
+}
+
+/*Titles*/
+.form-title {
+    color: var(--heading);
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.input-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--heading);
+    margin-top: 15px;
+}
+
+/*Image Upload*/
+.image-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.image-preview-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.image-preview {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 6px 10px;
+    background-color: #ff4d4f;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* Custom file upload button */
+.custom-file-upload {
+    padding: 10px 18px;
+    background-color: var(--highlight);
+    color: var(--color-black);
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    text-align: center;
+    display: inline-block;
+}
+
+/*Action Buttons*/
+.action-btn {
+    font-family: var(--font-jost);
+    font-size: 16px;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    padding: 0.7em 1.2em;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.action-btn:hover {
+    background-color: var(--color-gray-dark);
+}
+
+.submit-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+/*Content Blocks*/
+.content-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.add-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+/*Error Messages*/
+.error {
+    color: #ff4d4f;
+    font-size: 13px;
+}
+
+/*Responsive*/
+@media (max-width: 768px) {
+    .edit-blog-form {
+        padding: 20px;
+    }
+
+    .form-title {
+        font-size: 24px;
+    }
+
+    .input-title {
+        font-size: 18px;
+    }
+
+    .action-btn {
+        font-size: 14px;
+        padding: 0.6em 1em;
+    }
+}
