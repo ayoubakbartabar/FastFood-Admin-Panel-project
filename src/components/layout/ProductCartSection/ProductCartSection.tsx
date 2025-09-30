@@ -96,7 +96,7 @@ const ProductCartSection: React.FC<ProductCartSectionProps> = memo(
         <h2 className="product-cart-section-title">Products</h2>
         <div className="product-cart-section-grid">
           {/* Add new product card */}
-          <AddBlogCard to="new-product" />
+          <AddBlogCard to="/new-product" />
 
           {/* Render each product card */}
           {products.map((product) => (

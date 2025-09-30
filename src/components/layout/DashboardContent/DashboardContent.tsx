@@ -8,7 +8,7 @@ import type { Product } from "../../../types/server/productApi";
 
 import "./DashboardContent.css";
 import BlogsSection from "../../../pages/BlogsSection/BlogsSection";
-import OrderSection from "../../../pages/OrderSection/OrderSection";
+import OrderSection from "../../../pages/OrderPage/OrderPageCom/OrderSection/OrderSection";
 import axios from "axios";
 
 // Define props for DashboardContent

@@ -1,5 +1,5 @@
 import React from "react";
-import OrderSection from "../OrderSection/OrderSection";
+import OrderSection from "./OrderPageCom/OrderSection/OrderSection";
 
 const OrderPage: React.FC = () => {
   return (

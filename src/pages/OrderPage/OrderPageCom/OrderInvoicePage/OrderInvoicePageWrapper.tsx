@@ -1,9 +1,9 @@
 // src/pages/OrderInvoicePage/OrderInvoicePageWrapper.tsx
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getAllUsersWithOrders } from "../../types/server/orderApi";
+import { getAllUsersWithOrders } from "../../../../types/server/orderApi";
 import OrderInvoicePage from "./OrderInvoicePage";
-import type { UserOrders, Order } from "../../types/server/orderApi";
+import type { UserOrders, Order } from "../../../../types/server/orderApi";
 
 const OrderInvoicePageWrapper: React.FC = () => {
   const { userId, orderId } = useParams<{ userId: string; orderId: string }>();

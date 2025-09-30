@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import type { UserOrders, Order } from "../../types/server/orderApi";
+import type { UserOrders, Order } from "../../../../types/server/orderApi";
 import "./OrderInvoicePage.css";
 
 interface OrderInvoicePageProps {

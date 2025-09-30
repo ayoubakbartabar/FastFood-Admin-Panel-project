@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { getAllUsersWithOrders } from "../../types/server/orderApi";
-import type { UserOrders } from "../../types/server/orderApi";
+import { getAllUsersWithOrders } from "../../../../types/server/orderApi";
+import type { UserOrders } from "../../../../types/server/orderApi";
 
 import { FaUserTag } from "react-icons/fa";
 import { MdTableRestaurant } from "react-icons/md";
 
 import "./OrderSection.css";
 
-const OrderSection = () => {
+const OrderSection: React.FC = () => {
   const [usersWithOrders, setUsersWithOrders] = useState<UserOrders[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch all users who have at least one order
     getAllUsersWithOrders()
       .then((data) => {
+        console.log("Fetched users with orders:", data); 
         setUsersWithOrders(data);
         setLoading(false);
       })
@@ -36,9 +35,8 @@ const OrderSection = () => {
         <div
           key={user.id}
           className="user-order-box-container"
-          onClick={() => navigate(`./user-order/${user.id}`)}
+          onClick={() => navigate(`/user-order/${user.id}`)}
         >
-          {/* Card content area */}
           <div className="card-content">
             <div className="card-top">
               <span className="card-title">Orders for {user.name}</span>
@@ -47,8 +45,6 @@ const OrderSection = () => {
               <FaUserTag />
             </div>
           </div>
-
-          {/* Icon in the background */}
           <div className="card-image">
             <MdTableRestaurant />
           </div>
