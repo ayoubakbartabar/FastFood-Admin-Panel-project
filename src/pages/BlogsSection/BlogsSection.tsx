@@ -38,7 +38,7 @@ const BlogsSection: React.FC = () => {
   const skeletonCards = Array.from({ length: 4 });
 
   return (
-    <div className="home-page-blog-grid">
+    <div style={{padding:"1rem"}} className="home-page-blog-grid">
       {/* Add new blog card */}
       <AddBlogCard to="new-blog"/>
 

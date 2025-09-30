@@ -22,7 +22,7 @@ const AdminDashboard: React.FC = () => {
         setCollapsed={setCollapsed}
         mobileOpen={mobileOpen}
         setMobileOpen={setMobileOpen}
-        setActivePage={setActivePage}
+        // setActivePage={setActivePage}
       />
 
       <div

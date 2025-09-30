@@ -2,25 +2,34 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
+import MenuPage from "./pages/MenuPage/MenuPage";
+import OrderPage from "./pages/OrderPage/OrderPage";
+import BlogPage from "./pages/BlogPage/BlogPage";
 import ProductPage from "./pages/ProductPage/ProductPage";
-import NewBlogPage from "./pages/NewBlogPage/NewBlogPage";
-import UserOrderPage from "./pages/UserOrderPage/UserOrderPage";
-import EditBlogPage from "./pages/EditBlogPage/EditBlogPage";
 import NewProductPage from "./pages/NewProductPage/NewProductPage";
+import EditBlogPage from "./pages/EditBlogPage/EditBlogPage";
+import UserOrderPage from "./pages/UserOrderPage/UserOrderPage";
 import OrderInvoicePageWrapper from "./pages/OrderInvoicePage/OrderInvoicePageWrapper";
+import NewBlogSection from "./pages/NewBlogPage/NewBlogPage";
+// import AnalyticsPage from "./pages/AnalyticsPage/AnalyticsPage";
+// import ChatPage from "./pages/ChatPage/ChatPage";
+// import SettingsPage from "./pages/SettingsPage/SettingsPage";
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <Routes>
-      {/* Admin dashboard with blogs and add blog card */}
+    
       <Route path="/" element={<AdminDashboard />} />
+      <Route path="/menu" element={<MenuPage />} />
+      <Route path="/orders" element={<OrderPage />} />
+      <Route path="/blogs" element={<BlogPage />} />
 
       {/* Product page */}
       <Route path="/ProductPage" element={<ProductPage />} />
-      <Route path="/new-product" element={<NewProductPage />} />
+      <Route path="/new-product" element={<NewProductPage/>} />
 
       {/* New blog creation page */}
-      <Route path="/new-blog" element={<NewBlogPage />} />
+      <Route path="/new-blog" element={<NewBlogSection />} />
       <Route path="/edit-blog/:id" element={<EditBlogPage />} />
 
       {/* ,User Order creation page */}
@@ -30,6 +39,7 @@ const App: React.FC = () => {
         path="/orders/:userId/:orderId"
         element={<OrderInvoicePageWrapper />}
       />
+
     </Routes>
   );
 };

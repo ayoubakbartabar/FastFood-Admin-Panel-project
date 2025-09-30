@@ -3,7 +3,8 @@ import { getProducts } from "../../../types/server/productApi";
 import type { Product as ApiProduct } from "../../../types/server/productApi";
 
 import ProductCartSection from "../ProductCartSection/ProductCartSection";
-import type { Product } from "../ProductCartSection/ProductCartSection";
+import type { Product } from "../../../types/server/productApi";
+
 
 import "./DashboardContent.css";
 import BlogsSection from "../../../pages/BlogsSection/BlogsSection";
