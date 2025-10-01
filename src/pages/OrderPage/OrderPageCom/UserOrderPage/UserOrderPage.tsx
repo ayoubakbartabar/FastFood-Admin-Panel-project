@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getAllUsersWithOrders } from "../../types/server/orderApi";
-import type { UserOrders, Order } from "../../types/server/orderApi";
+import { getAllUsersWithOrders } from "../../../../types/server/orderApi";
+import type { UserOrders, Order } from "../../../../types/server/orderApi";
 
 import "./UserOrderPage.css";
 

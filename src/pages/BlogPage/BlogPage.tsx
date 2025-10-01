@@ -1,5 +1,6 @@
 import React from "react";
-import BlogsSection from "../../pages/BlogsSection/BlogsSection";
+import BlogsSection from "./BlogPageCom/BlogsSection/BlogsSection";
+
 
 const BlogPage: React.FC = () => {
   return (

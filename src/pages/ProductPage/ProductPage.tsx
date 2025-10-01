@@ -36,6 +36,7 @@ const ProductPage: React.FC = memo(() => {
   const product: Product | undefined = location.state?.product;
 
   const navigate = useNavigate();
+  
   // State for image preview
   const [preview, setPreview] = useState<string | null>(
     product?.image

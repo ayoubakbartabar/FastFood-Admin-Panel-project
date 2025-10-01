@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { API_BASE_URL, createProduct } from "../../types/server/productApi";
+import { API_BASE_URL, createProduct } from "../../../../types/server/productApi";
 import "./NewProductPage.css";
 import { useNavigate } from "react-router-dom";
 

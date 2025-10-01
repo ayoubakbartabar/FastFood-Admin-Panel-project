@@ -2,11 +2,12 @@ import React, { useEffect, useState, useMemo } from "react";
 import { MdOutlineArrowRightAlt } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-import { getBlogs } from "../../types/server/blogsApi";
-import type { Blog } from "../../types/server/blogsApi";
+import { getBlogs } from "../../../../types/server/blogsApi";
+import type { Blog } from "../../../../types/server/blogsApi";
 
 import "./BlogsSection.css";
-import AddBlogCard from "./BlogSectionCom/AddBlogCard/AddBlogCard";
+import AddBlogCard from "../AddBlogCard/AddBlogCard";
+
 
 const BlogsSection: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -38,9 +39,9 @@ const BlogsSection: React.FC = () => {
   const skeletonCards = Array.from({ length: 4 });
 
   return (
-    <div style={{padding:"1rem"}} className="home-page-blog-grid">
+    <div style={{ padding: "1rem" }} className="home-page-blog-grid">
       {/* Add new blog card */}
-      <AddBlogCard to="new-blog"/>
+      <AddBlogCard to="/new-blog" />
 
       {/* Skeletons */}
       {loading
@@ -55,8 +56,8 @@ const BlogsSection: React.FC = () => {
             </div>
           ))
         : blogsWithFirstParagraph.map((blog) => {
-          console.log(blog.image);
-          
+            console.log(blog.image);
+
             return (
               <div key={blog.id} className="blog-card">
                 <img src={blog.image} alt={blog.title} className="blog-image" />

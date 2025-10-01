@@ -1,9 +1,10 @@
 import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
-import AddBlogCard from "../../../pages/BlogsSection/BlogSectionCom/AddBlogCard/AddBlogCard";
+
 import { API_BASE_URL } from "../../../types/server/productApi";
 import type { Product } from "../../../types/server/productApi";
 import "./ProductCartSection.css";
+import AddBlogCard from "../../../pages/BlogPage/BlogPageCom/AddBlogCard/AddBlogCard";
 
 // Props for single product card
 interface ProductCardProps {
@@ -15,7 +16,7 @@ const ProductCard: React.FC<ProductCardProps> = memo(({ product }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/ProductPage", { state: { product } });
+    navigate(`/edit-product-page/${product.id}`, { state: { product } });
   };
 
   const imageSrc = product.image.startsWith("http")

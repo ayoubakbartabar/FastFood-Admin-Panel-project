@@ -1,101 +1,73 @@
-import React, { useState, type ChangeEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Formik, Form, FieldArray, ErrorMessage } from "formik";
-import * as Yup from "yup";
 
-import { createBlog } from "../../types/server/blogsApi";
-import type { Blog } from "../../types/server/blogsApi";
-import type { FormikHelpers } from "formik";
+import { getBlogById, updateBlog } from "../../../../types/server/blogsApi";
+import type { Blog } from "../../../../types/server/blogsApi";
 
 import { FaTrash, FaParagraph, FaImages } from "react-icons/fa";
 import { MdOutlineSubtitles } from "react-icons/md";
 
-import "./NewBlogPage.css";
+import "./EditBlogPage.css";
 
-// Validation Schema
-const BlogSchema = Yup.object().shape({
-  image: Yup.string().required("Image is required"),
-  title: Yup.string().required("Title is required"),
-  categories: Yup.string().required("Category is required"),
-  tags: Yup.string(),
-  content: Yup.array()
-    .of(
-      Yup.object().shape({
-        type: Yup.string().oneOf(["paragraph", "title", "image"]).required(),
-        text: Yup.string().required("Content cannot be empty"),
-      })
-    )
-    .min(1, "At least one content block is required"),
-});
 
-// Main Component
-const NewBlogSection: React.FC = () => {
+// Main Edit Blog Page
+const EditBlogPage: React.FC = () => {
+  const { id: blogId } = useParams<{ id: string }>();
+  const [blog, setBlog] = useState<Blog | null>(null);
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
-  const [filedValue, setFieldValue] = useState<string | null>(null);
 
-  // Initial form values
-  const initialValues = {
-    image: "",
-    title: "",
-    categories: "",
-    tags: "",
-    content: [{ type: "paragraph", text: "" }],
-  };
+  // Fetch blog by id on component mount
+  useEffect(() => {
+    if (!blogId) return;
 
-  // Form submit handler
-  const handleSubmit = async (
-    values: typeof initialValues,
-    { setSubmitting, resetForm }: FormikHelpers<typeof initialValues>
-  ) => {
-    const blogData: Omit<Blog, "id" | "createdAt"> = {
-      ...values,
-      tags: values.tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter(Boolean),
-      content: values.content.map((block) => ({
-        type: block.type as "paragraph" | "title" | "image",
-        text: block.text,
-      })),
+    const fetchBlog = async () => {
+      setLoading(true);
+      const data = await getBlogById(blogId);
+      if (data) setBlog(data);
+      setLoading(false);
     };
 
+    fetchBlog();
+  }, [blogId]);
+
+  // Submit handler
+  const handlerSubmit = async (values: Blog) => {
+    if (!blogId) return;
     try {
-      const newBlog = await createBlog(blogData);
-      alert(newBlog ? "Blog created successfully!" : "Failed to create blog");
-      resetForm();
+      await updateBlog(values);
+      alert("Blog updated successfully!");
       navigate("/");
-    } catch (err) {
-      console.error("Error saving blog:", err);
-      alert("An error occurred while saving the blog");
-    } finally {
-      setSubmitting(false);
+    } catch (error) {
+      console.error("Failed to update blog:", error);
+      alert("Failed to update blog.");
     }
   };
 
+  if (loading) return <p>Loading blog...</p>;
+  if (!blog) return <p>No blog found.</p>;
+
   return (
-    <div className="new-blog-page">
-      <h1 className="form-title">Add New Blog</h1>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={BlogSchema}
-        onSubmit={handleSubmit}
-      >
+    <div className="edit-blog-page">
+      <h1 className="form-title">Edit Blog</h1>
+
+      <Formik enableReinitialize initialValues={blog} onSubmit={handlerSubmit}>
         {({
           values,
-          isSubmitting,
-          isValid,
           handleChange,
           handleBlur,
           setFieldValue,
+          isSubmitting,
         }) => (
-          <Form className="blog-form">
+          <Form className="edit-blog-form">
             {/* Image Upload Section*/}
             <div className="image-upload-container">
               {values.image ? (
-                // Image Preview with Remove button
                 <div className="image-preview-wrapper">
                   <img
-                    src={values.image as string}
+                    src={values.image}
                     alt="Preview"
                     className="image-preview"
                   />
@@ -108,18 +80,17 @@ const NewBlogSection: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                // Custom Upload Button
                 <label className="custom-file-upload">
                   <input
                     type="file"
                     accept="image/*"
                     name="image"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       const file = e.target.files?.[0];
                       if (file) {
                         const reader = new FileReader();
                         reader.onloadend = () =>
-                          setFieldValue("image", reader.result);
+                          setFieldValue("image", reader.result as string);
                         reader.readAsDataURL(file);
                       }
                     }}
@@ -163,20 +134,24 @@ const NewBlogSection: React.FC = () => {
               <input
                 name="tags"
                 placeholder="Tags (comma separated)"
-                value={values.tags}
-                onChange={handleChange}
+                value={values.tags.join(", ")}
+                onChange={(e) =>
+                  setFieldValue(
+                    "tags",
+                    e.target.value.split(",").map((t) => t.trim())
+                  )
+                }
                 onBlur={handleBlur}
               />
             </div>
 
-            {/* Content Blocks Section*/}
+            {/* Content Blocks*/}
             <h3 className="input-title">Content:</h3>
             <FieldArray name="content">
               {({ push, remove }) => (
                 <div>
                   {values.content.map((block, idx) => (
                     <div key={idx} className="content-block">
-                      {/* Select block type */}
                       <select
                         name={`content[${idx}].type`}
                         value={block.type}
@@ -188,7 +163,6 @@ const NewBlogSection: React.FC = () => {
                         <option value="image">Image</option>
                       </select>
 
-                      {/* Textarea for paragraph/title */}
                       {(block.type === "paragraph" ||
                         block.type === "title") && (
                         <textarea
@@ -198,7 +172,6 @@ const NewBlogSection: React.FC = () => {
                           value={block.text}
                           onChange={(e) => {
                             handleChange(e);
-                            // Auto resize textarea
                             e.target.style.height = "auto";
                             e.target.style.height = `${
                               e.target.scrollHeight + 6
@@ -208,7 +181,6 @@ const NewBlogSection: React.FC = () => {
                         />
                       )}
 
-                      {/* Input for image URL */}
                       {block.type === "image" && (
                         <input
                           name={`content[${idx}].text`}
@@ -225,10 +197,9 @@ const NewBlogSection: React.FC = () => {
                         className="error"
                       />
 
-                      {/* Remove content block button */}
                       <button
-                        className="action-btn"
                         type="button"
+                        className="action-btn"
                         onClick={() => remove(idx)}
                       >
                         <FaTrash /> Remove
@@ -236,25 +207,24 @@ const NewBlogSection: React.FC = () => {
                     </div>
                   ))}
 
-                  {/* Buttons to add content blocks */}
                   <div className="add-buttons">
                     <button
-                      className="action-btn"
                       type="button"
+                      className="action-btn"
                       onClick={() => push({ type: "paragraph", text: "" })}
                     >
                       <FaParagraph /> Add Paragraph
                     </button>
                     <button
-                      className="action-btn"
                       type="button"
+                      className="action-btn"
                       onClick={() => push({ type: "title", text: "" })}
                     >
                       <MdOutlineSubtitles /> Add Title
                     </button>
                     <button
-                      className="action-btn"
                       type="button"
+                      className="action-btn"
                       onClick={() => push({ type: "image", text: "" })}
                     >
                       <FaImages /> Add Image
@@ -263,14 +233,12 @@ const NewBlogSection: React.FC = () => {
                 </div>
               )}
             </FieldArray>
-
-            {/* Submit Button */}
             <button
               type="submit"
-              disabled={isSubmitting || !isValid}
+              disabled={isSubmitting}
               className="action-btn submit-btn"
             >
-              Create
+              Save
             </button>
           </Form>
         )}
@@ -279,4 +247,4 @@ const NewBlogSection: React.FC = () => {
   );
 };
 
-export default NewBlogSection;
+export default EditBlogPage;
