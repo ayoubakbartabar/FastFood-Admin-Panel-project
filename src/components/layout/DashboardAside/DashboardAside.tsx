@@ -28,7 +28,7 @@ const DashboardAside: React.FC<DashboardAsideProps> = ({
     { id: 4, title: "Blogs", icon: <FaBook />, path: "/blogs" },
     { id: 5, title: "Analytics", icon: <IoAnalyticsOutline />, path: "/analytics" },
     { id: 6, title: "Chat", icon: <IoChatbubbleEllipses />, path: "/chat" },
-    { id: 7, title: "Settings", icon: <IoSettings />, path: "/settings" },
+    { id: 7, title: "Settings", icon: <IoSettings />, path: "/setting" },
   ];
 
   return (

@@ -1,4 +1,3 @@
-// blogsApi.ts
 import axios from "axios";
 
 // Types

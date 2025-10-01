@@ -15,6 +15,8 @@ import NewProductPage from "./pages/ProductPage/ProductPageCom/NewProductPage/Ne
 import NewBlogSection from "./pages/BlogPage/BlogPageCom/NewBlogPage/NewBlogPage";
 import UserOrderPage from "./pages/OrderPage/OrderPageCom/UserOrderPage/UserOrderPage";
 import SettingPage from "./pages/SettingPage/SettingPage";
+import NavbarPage from "./pages/NavbarPage/NavbarPage";
+import FooterPage from "./pages/FooterPage/FooterPage";
 
 const App = () => {
   return (
@@ -24,6 +26,8 @@ const App = () => {
       <Route path="/orders" element={<OrderPage />} />
       <Route path="/blogs" element={<BlogPage />} />
       <Route path="/setting" element={<SettingPage />} />
+      <Route path="/navbar-page" element={<NavbarPage />} />
+      <Route path="/footer-page" element={<FooterPage />} />
 
       <Route path="/new-product" element={<NewProductPage />} />
       <Route path="/edit-product-page/:id" element={<ProductPage />} />
