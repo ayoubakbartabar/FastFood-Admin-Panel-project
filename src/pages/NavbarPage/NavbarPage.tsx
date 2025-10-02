@@ -1,62 +1,243 @@
 import React, { useEffect, useState } from "react";
-import "./NavbarPage.css";
-import { fetchNavbarData } from "../../types/server/navbarApi";
+import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import {
+  fetchNavbarData,
+  updateNavbarData,
+} from "../../types/server/navbarApi";
 import type { NavbarDataProps } from "../../types/server/navbarApi";
+import "./NavbarPage.css";
 
-function NavbarPage() {
-  const [data, setData] = useState<NavbarDataProps | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+// Validation schema: Accepts either URL or Base64 for logos
+const NavbarSchema = Yup.object().shape({
+  logo: Yup.array()
+    .of(
+      Yup.string().test(
+        "is-url-or-base64",
+        "Invalid URL or Base64",
+        (value) => {
+          if (!value) return false;
+          if (value.startsWith("data:image/")) return true; // Base64
+          try {
+            new URL(value); // Valid URL
+            return true;
+          } catch {
+            return false;
+          }
+        }
+      )
+    )
+    .min(1, "At least one logo is required"),
+  Menu: Yup.array().of(
+    Yup.object().shape({
+      id: Yup.number().required(),
+      title: Yup.string().required("Menu title is required"),
+      href: Yup.string().required("Menu href is required"),
+    })
+  ),
+  Icon: Yup.array().of(
+    Yup.object().shape({
+      id: Yup.number().required(),
+      name: Yup.string().required("Icon name is required"),
+    })
+  ),
+});
 
+const NavbarPage: React.FC = () => {
+  const [initialValues, setInitialValues] = useState<NavbarDataProps | null>(
+    null
+  );
+  const [loading, setLoading] = useState(true);
+
+  // Fetch navbar data
   useEffect(() => {
     const getData = async () => {
-      try {
-        setLoading(true);
-        const result = await fetchNavbarData();
-        if (result) {
-          setData(result);
-        } else {
-          setError("No data received from API");
-        }
-      } catch (err) {
-        setError("Failed to fetch data");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+      const data = await fetchNavbarData();
+      if (data) setInitialValues(data);
+      setLoading(false);
     };
-
     getData();
   }, []);
-  
-  console.log(data);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (!initialValues) return <div>No navbar data found</div>;
+
+  // Convert uploaded image to Base64
+  const handleImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    push: any
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        push(reader.result as string); // push Base64 string
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = async (
+    values: NavbarDataProps,
+    { setSubmitting }: any
+  ) => {
+    try {
+      console.log("Submitting data:", values);
+      await updateNavbarData(values); // PUT request
+      alert("Navbar updated successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update navbar!");
+    }
+    setSubmitting(false);
+  };
 
   return (
-    <div className="navbar-page">
-      <div className="logo">
-        {data?.logo.map((img, idx) => (
-          <img key={idx} src={img} alt={`Logo ${idx}`} />
-        ))}
-      </div>
+    <div className="navbar-form">
+      <h2>Edit Navbar</h2>
 
-      <ul className="menu">
-        {data?.Menu.map((item) => (
-          <li key={item.id}>
-            <a href={item.href}>{item.title}</a>
-          </li>
-        ))}
-      </ul>
+      <Formik
+        enableReinitialize
+        initialValues={initialValues}
+        validationSchema={NavbarSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ values, isSubmitting }) => (
+          <Form>
+            {/* Logos */}
+            <FieldArray name="logo">
+              {({ push, remove }) => (
+                <div className="form-group">
+                  <label>Logos:</label>
+                  {values.logo.map((url, idx) => (
+                    <div key={idx} className="array-item">
+                      {url && (
+                        <img
+                          src={url}
+                          alt={`Logo ${idx}`}
+                          className="logo-preview"
+                        />
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload(e, push)}
+                      />
+                      <button
+                        type="button"
+                        className="btn-remove"
+                        onClick={() => remove(idx)}
+                      >
+                        Remove
+                      </button>
+                      <ErrorMessage
+                        name={`logo.${idx}`}
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="btn-add"
+                    onClick={() => push("")}
+                  >
+                    Add Logo
+                  </button>
+                </div>
+              )}
+            </FieldArray>
 
-      <ul className="icons">
-        {data?.Icon.map((icon) => (
-          <li key={icon.id}>{icon.name}</li>
-        ))}
-      </ul>
+            {/* Menu Items */}
+            <FieldArray name="Menu">
+              {({ push, remove }) => (
+                <div className="form-group">
+                  <label>Menu Items:</label>
+                  {values.Menu.map((item, idx) => (
+                    <div key={item.id} className="array-item">
+                      <Field name={`Menu.${idx}.title`} placeholder="Title" />
+                      <Field name={`Menu.${idx}.href`} placeholder="Href" />
+                      <button
+                        type="button"
+                        className="btn-remove"
+                        onClick={() => remove(idx)}
+                      >
+                        Remove
+                      </button>
+                      <ErrorMessage
+                        name={`Menu.${idx}.title`}
+                        component="div"
+                        className="error"
+                      />
+                      <ErrorMessage
+                        name={`Menu.${idx}.href`}
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="btn-add"
+                    onClick={() =>
+                      push({ id: Date.now(), title: "", href: "" })
+                    }
+                  >
+                    Add Menu
+                  </button>
+                </div>
+              )}
+            </FieldArray>
+
+            {/* Icons */}
+            <FieldArray name="Icon">
+              {({ push, remove }) => (
+                <div className="form-group">
+                  <label>Icons:</label>
+                  {values.Icon.map((icon, idx) => (
+                    <div key={icon.id} className="array-item">
+                      <Field
+                        name={`Icon.${idx}.name`}
+                        placeholder="Icon name"
+                      />
+                      <button
+                        type="button"
+                        className="btn-remove"
+                        onClick={() => remove(idx)}
+                      >
+                        Remove
+                      </button>
+                      <ErrorMessage
+                        name={`Icon.${idx}.name`}
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="btn-add"
+                    onClick={() => push({ id: Date.now(), name: "" })}
+                  >
+                    Add Icon
+                  </button>
+                </div>
+              )}
+            </FieldArray>
+
+            <button
+              type="submit"
+              className="btn-submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Saving..." : "Save Changes"}
+            </button>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
-}
+};
 
 export default NavbarPage;

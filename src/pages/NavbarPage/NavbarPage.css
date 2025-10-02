@@ -1,0 +1,120 @@
+.navbar-form {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #f9fafb;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+    font-family: "Inter", sans-serif;
+}
+
+.navbar-form h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #111827;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    color: #374151;
+}
+
+.array-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.8rem;
+}
+
+.array-item input[type="text"],
+.array-item input[type="url"],
+.array-item input[type="file"] {
+    flex: 1;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    transition: border 0.2s;
+}
+
+.array-item input:focus {
+    border-color: #3b82f6;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+button[type="button"] {
+    background-color: #10b981;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+button[type="button"]:hover {
+    background-color: #047857;
+}
+
+button.array-item {
+    background-color: #ef4444;
+}
+
+button.array-item:hover {
+    background-color: #b91c1c;
+}
+
+.error {
+    color: #b91c1c;
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+}
+
+button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 0.8rem 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(90deg, #3b82f6, #06b6d4);
+    color: #ffffff;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 1.5rem;
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.logo-preview {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+}
+
+@media (max-width: 600px) {
+    .array-item {
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    button[type="button"] {
+        width: 100%;
+    }
+}
