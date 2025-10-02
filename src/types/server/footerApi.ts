@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// Base URL
 export const API_BASE_URL = "http://localhost:3001";
 
 export interface CompanyInfo {
@@ -42,14 +41,23 @@ export interface FooterDataProps {
   copyright: string;
 }
 
-
 export const fetchFooterData = async (): Promise<FooterDataProps | null> => {
   try {
     const response = await axios.get<FooterDataProps>(`${API_BASE_URL}/footer`);
-    console.log("Footer API Response:", response.data); 
     return response.data;
   } catch (error) {
     console.error("Error fetching footer data:", error);
     return null;
+  }
+};
+
+
+export const updateFooterData = async (data: FooterDataProps) => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/footer`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating footer data:", error);
+    throw error;
   }
 };
