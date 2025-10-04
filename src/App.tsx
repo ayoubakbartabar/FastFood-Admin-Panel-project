@@ -17,6 +17,7 @@ import UserOrderPage from "./pages/OrderPage/OrderPageCom/UserOrderPage/UserOrde
 import SettingPage from "./pages/SettingPage/SettingPage";
 import NavbarPage from "./pages/NavbarPage/NavbarPage";
 import FooterPage from "./pages/FooterPage/FooterPage";
+import HomePaginationPage from "./pages/HomePaginationPage/HomePaginationPage";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
       <Route path="/setting" element={<SettingPage />} />
       <Route path="/navbar-page" element={<NavbarPage />} />
       <Route path="/footer-page" element={<FooterPage />} />
+      <Route path="/home-pagination-page" element={<HomePaginationPage />} />
 
       <Route path="/new-product" element={<NewProductPage />} />
       <Route path="/edit-product-page/:id" element={<ProductPage />} />

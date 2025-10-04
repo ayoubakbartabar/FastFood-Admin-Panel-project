@@ -27,6 +27,14 @@ function SettingPage() {
         <span className="circle5"></span>
         <span className="text">Footer</span>
       </button>
+      <button className="footer-btn" onClick={() => navigate("/home-pagination-page")}>
+        <span className="circle1"></span>
+        <span className="circle2"></span>
+        <span className="circle3"></span>
+        <span className="circle4"></span>
+        <span className="circle5"></span>
+        <span className="text">Home</span>
+      </button>
     </div>
   );
 }
