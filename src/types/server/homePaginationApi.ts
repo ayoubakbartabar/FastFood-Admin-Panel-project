@@ -40,3 +40,14 @@ export const createHomePaginationData = async (
     throw error;
   }
 };
+
+// delete data by id
+export const deleteHomePaginationData = async (id: string | number) => {
+  try {
+    console.log("Requesting delete:", `${API_BASE_URL}/HomePagination/${id}`);
+    await axios.delete(`${API_BASE_URL}/HomePagination/${id}`);
+  } catch (error) {
+    console.error("Error deleting item:", error);
+    throw error;
+  }
+};
