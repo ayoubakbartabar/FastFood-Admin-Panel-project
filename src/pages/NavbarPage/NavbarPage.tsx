@@ -8,24 +8,13 @@ import {
 import type { NavbarDataProps } from "../../types/server/navbarApi";
 import "./NavbarPage.css";
 
-// Validation schema: Accepts either URL or Base64 for logos
+// Validation schema: only allow valid URLs for logos
 const NavbarSchema = Yup.object().shape({
   logo: Yup.array()
     .of(
-      Yup.string().test(
-        "is-url-or-base64",
-        "Invalid URL or Base64",
-        (value) => {
-          if (!value) return false;
-          if (value.startsWith("data:image/")) return true; // Base64
-          try {
-            new URL(value); // Valid URL
-            return true;
-          } catch {
-            return false;
-          }
-        }
-      )
+      Yup.string()
+        .url("Invalid URL") // Only valid URL is accepted
+        .required("Logo URL is required")
     )
     .min(1, "At least one logo is required"),
   Menu: Yup.array().of(
@@ -49,7 +38,7 @@ const NavbarPage: React.FC = () => {
   );
   const [loading, setLoading] = useState(true);
 
-  // Fetch navbar data
+  // Fetch navbar data on component mount
   useEffect(() => {
     const getData = async () => {
       const data = await fetchNavbarData();
@@ -62,21 +51,6 @@ const NavbarPage: React.FC = () => {
   if (loading) return <div>Loading...</div>;
   if (!initialValues) return <div>No navbar data found</div>;
 
-  // Convert uploaded image to Base64
-  const handleImageUpload = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    push: any
-  ) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        push(reader.result as string); // push Base64 string
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   // Handle form submission
   const handleSubmit = async (
     values: NavbarDataProps,
@@ -84,7 +58,7 @@ const NavbarPage: React.FC = () => {
   ) => {
     try {
       console.log("Submitting data:", values);
-      await updateNavbarData(values); // PUT request
+      await updateNavbarData(values); // PUT request to update navbar
       alert("Navbar updated successfully!");
     } catch (err) {
       console.error(err);
@@ -105,13 +79,14 @@ const NavbarPage: React.FC = () => {
       >
         {({ values, isSubmitting }) => (
           <Form>
-            {/* Logos */}
+            {/* Logos Section */}
             <FieldArray name="logo">
               {({ push, remove }) => (
                 <div className="form-group">
                   <label>Logos:</label>
                   {values.logo.map((url, idx) => (
                     <div key={idx} className="array-item">
+                      {/* Display logo preview */}
                       {url && (
                         <img
                           src={url}
@@ -119,10 +94,12 @@ const NavbarPage: React.FC = () => {
                           className="logo-preview"
                         />
                       )}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleImageUpload(e, push)}
+                      {/* Input field for URL only */}
+                      <Field
+                        type="text"
+                        name={`logo.${idx}`}
+                        placeholder="https://example.com/logo.png"
+                        className="new-product-input"
                       />
                       <button
                         type="button"
@@ -149,7 +126,7 @@ const NavbarPage: React.FC = () => {
               )}
             </FieldArray>
 
-            {/* Menu Items */}
+            {/* Menu Items Section */}
             <FieldArray name="Menu">
               {({ push, remove }) => (
                 <div className="form-group">
@@ -190,7 +167,7 @@ const NavbarPage: React.FC = () => {
               )}
             </FieldArray>
 
-            {/* Icons */}
+            {/* Icons Section */}
             <FieldArray name="Icon">
               {({ push, remove }) => (
                 <div className="form-group">
@@ -226,6 +203,7 @@ const NavbarPage: React.FC = () => {
               )}
             </FieldArray>
 
+            {/* Submit button */}
             <button
               type="submit"
               className="btn-submit"

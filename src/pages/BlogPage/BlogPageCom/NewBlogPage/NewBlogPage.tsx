@@ -1,4 +1,4 @@
-import React, { useState, type ChangeEvent } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, FieldArray, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
@@ -31,7 +31,6 @@ const BlogSchema = Yup.object().shape({
 // Main Component
 const NewBlogSection: React.FC = () => {
   const navigate = useNavigate();
-  const [filedValue, setFieldValue] = useState<string | null>(null);
 
   // Initial form values
   const initialValues = {
