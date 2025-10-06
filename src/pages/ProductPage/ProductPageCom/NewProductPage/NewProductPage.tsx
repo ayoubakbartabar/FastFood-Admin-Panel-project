@@ -1,7 +1,10 @@
 import React, { useCallback } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { API_BASE_URL, createProduct } from "../../../../types/server/productApi";
+import {
+  API_BASE_URL,
+  createProduct,
+} from "../../../../types/server/productApi";
 import "./NewProductPage.css";
 import { useNavigate } from "react-router-dom";
 
@@ -40,16 +43,6 @@ const NewProductPage: React.FC = () => {
     },
     [navigate]
   );
-
-  // Convert uploaded file to Base64
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
-  };
 
   return (
     <div className="new-product-container">
@@ -90,17 +83,13 @@ const NewProductPage: React.FC = () => {
                     </button>
                   </>
                 ) : (
-                  <label className="new-product-upload-btn">
-                    Upload Image
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={async (e) => {
-                        if (e.target.files && e.target.files[0]) {
-                          const base64 = await fileToBase64(e.target.files[0]);
-                          setFieldValue("image", base64);
-                        }
-                      }}
+                  <label className="new-product-upload">
+                    Image
+                    <Field
+                      type="text"
+                      name="image"
+                      placeholder="https://example.com/image.jpg"
+                      className="new-product-input"
                     />
                   </label>
                 )}

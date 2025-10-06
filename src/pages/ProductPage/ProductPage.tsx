@@ -36,7 +36,7 @@ const ProductPage: React.FC = memo(() => {
   const product: Product | undefined = location.state?.product;
 
   const navigate = useNavigate();
-  
+
   // State for image preview
   const [preview, setPreview] = useState<string | null>(
     product?.image
@@ -112,23 +112,13 @@ const ProductPage: React.FC = memo(() => {
                     </button>
                   </>
                 ) : (
-                  <label className="product-page-elem__upload-btn">
+                  <label className="product-page-elem__upload">
                     Upload Image
-                    <input
-                      type="file"
-                      accept="image/*"
+                    <Field
+                      type="text"
                       name="image"
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.onloadend = () => {
-                            setFieldValue("image", reader.result as string);
-                            setPreview(reader.result as string);
-                          };
-                          reader.readAsDataURL(file);
-                        }
-                      }}
+                      placeholder="https://example.com/image.jpg"
+                      className="new-product-input"
                     />
                   </label>
                 )}

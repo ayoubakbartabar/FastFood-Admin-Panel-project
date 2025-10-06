@@ -43,6 +43,7 @@
     font-size: 14px;
     outline: none;
     transition: border-color 0.25s, box-shadow 0.25s;
+    width: 100%;
 }
 
 .product-page-elem__input:focus {
