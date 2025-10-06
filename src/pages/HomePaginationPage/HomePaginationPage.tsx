@@ -19,17 +19,7 @@ const HomePaginationSchema = Yup.object().shape({
   image: Yup.string().required("Image is required"),
 });
 
-// Helper function to convert uploaded file to Base64 string
-const fileToBase64 = (file: File): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
-
 const HomePaginationPage: React.FC = () => {
-  // State for storing initial form values
   const [initialValues, setInitialValues] = useState<{
     items: HomePaginationProp[];
   }>({ items: [] });
@@ -39,7 +29,17 @@ const HomePaginationPage: React.FC = () => {
   useEffect(() => {
     const getData = async () => {
       const result = await fetchHomePaginationData();
-      if (result) setInitialValues({ items: result });
+      if (result) {
+        // Ensure all fields are strings to avoid uncontrolled input warning
+        const sanitized = result.map((item) => ({
+          id: item.id,
+          header: item.header || "",
+          title: item.title || "",
+          description: item.description || "",
+          image: item.image || "",
+        }));
+        setInitialValues({ items: sanitized });
+      }
       setLoading(false);
     };
     getData();
@@ -54,13 +54,11 @@ const HomePaginationPage: React.FC = () => {
     { setSubmitting }: any
   ) => {
     try {
-      // Determine the maximum existing ID in the current data
       const maxExistingId = Math.max(
         ...initialValues.items.map((i) => i.id),
         0
       );
 
-      // Only create new items with ID greater than existing max ID
       for (const item of values.items) {
         if (item.id > maxExistingId) {
           await createHomePaginationData(item);
@@ -87,7 +85,7 @@ const HomePaginationPage: React.FC = () => {
         })}
         onSubmit={handleSubmit}
       >
-        {({ values, setFieldValue, isSubmitting }) => (
+        {({ values, isSubmitting }) => (
           <Form>
             <FieldArray name="items">
               {({ push, remove }) => (
@@ -96,10 +94,13 @@ const HomePaginationPage: React.FC = () => {
                     <div key={item.id} className="form-array-item">
                       <h4>Item {idx + 1}</h4>
 
-                      {/* Header input field */}
+                      {/* Header */}
                       <div className="form-group">
                         <label>Header:</label>
-                        <Field name={`items[${idx}].header`} />
+                        <Field
+                          name={`items[${idx}].header`}
+                          value={item.header || ""}
+                        />
                         <ErrorMessage
                           name={`items[${idx}].header`}
                           component="div"
@@ -107,10 +108,13 @@ const HomePaginationPage: React.FC = () => {
                         />
                       </div>
 
-                      {/* Title input field */}
+                      {/* Title */}
                       <div className="form-group">
                         <label>Title:</label>
-                        <Field name={`items[${idx}].title`} />
+                        <Field
+                          name={`items[${idx}].title`}
+                          value={item.title || ""}
+                        />
                         <ErrorMessage
                           name={`items[${idx}].title`}
                           component="div"
@@ -118,12 +122,13 @@ const HomePaginationPage: React.FC = () => {
                         />
                       </div>
 
-                      {/* Description textarea */}
+                      {/* Description */}
                       <div className="form-group">
                         <label>Description:</label>
                         <Field
                           as="textarea"
                           name={`items[${idx}].description`}
+                          value={item.description || ""}
                         />
                         <ErrorMessage
                           name={`items[${idx}].description`}
@@ -132,25 +137,15 @@ const HomePaginationPage: React.FC = () => {
                         />
                       </div>
 
-                      {/* Image upload input */}
+                      {/* Image */}
                       <div className="form-group">
                         <label>Image:</label>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={async (e) => {
-                            if (
-                              e.currentTarget.files &&
-                              e.currentTarget.files[0]
-                            ) {
-                              const base64 = await fileToBase64(
-                                e.currentTarget.files[0]
-                              );
-                              setFieldValue(`items[${idx}].image`, base64);
-                            }
-                          }}
+                        <Field
+                          type="text"
+                          name={`items[${idx}].image`}
+                          value={item.image || ""}
+                          placeholder="https://example.com/image.jpg"
                         />
-                        {/* Show image preview if available */}
                         {item.image && (
                           <img
                             src={item.image}
@@ -165,7 +160,7 @@ const HomePaginationPage: React.FC = () => {
                         />
                       </div>
 
-                      {/* Remove item button */}
+                      {/* Remove button */}
                       <button
                         type="button"
                         onClick={async () => {
@@ -176,7 +171,7 @@ const HomePaginationPage: React.FC = () => {
                             ) {
                               await deleteHomePaginationData(Number(item.id));
                             }
-                            remove(idx); 
+                            remove(idx);
                           } catch (err) {
                             console.error(err);
                             alert("Failed to delete item!");
@@ -188,7 +183,7 @@ const HomePaginationPage: React.FC = () => {
                     </div>
                   ))}
 
-                  {/* Add new item button */}
+                  {/* Add new item */}
                   <button
                     type="button"
                     onClick={() => {
@@ -211,7 +206,7 @@ const HomePaginationPage: React.FC = () => {
               )}
             </FieldArray>
 
-            {/* Submit form button */}
+            {/* Submit button */}
             <button type="submit" disabled={isSubmitting}>
               {isSubmitting ? "Saving..." : "Save Changes"}
             </button>
