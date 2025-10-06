@@ -43,7 +43,6 @@
     transition: all 0.3s ease;
     text-align: center;
     width: 100%;
-    max-width: 250px;
 }
 
 .custom-file-upload:hover {

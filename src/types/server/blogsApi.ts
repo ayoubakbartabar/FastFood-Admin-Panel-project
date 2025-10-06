@@ -70,7 +70,7 @@ export const createBlog = async (
   blog: Omit<Blog, "id" | "createdAt">
 ): Promise<Blog | null> => {
   try {
-    const { data } = await api.post<Blog>("/blogs", blog);
+    const { data } = await api.post<Blog>("/blogs", blog); 
     return data;
   } catch (error) {
     console.error("Error creating blog:", error);

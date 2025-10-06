@@ -1,6 +1,6 @@
 import React, { useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { Formik, Form, FieldArray, ErrorMessage } from "formik";
+import { Formik, Form, FieldArray, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
 
 import { createBlog } from "../../../../types/server/blogsApi";
@@ -110,21 +110,12 @@ const NewBlogSection: React.FC = () => {
               ) : (
                 // Custom Upload Button
                 <label className="custom-file-upload">
-                  <input
-                    type="file"
-                    accept="image/*"
+                  <Field
+                    type="text"
                     name="image"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () =>
-                          setFieldValue("image", reader.result);
-                        reader.readAsDataURL(file);
-                      }
-                    }}
+                    placeholder="https://example.com/image.jpg"
+                    className="new-product-input"
                   />
-                  Upload Image
                 </label>
               )}
               <ErrorMessage name="image" component="div" className="error" />

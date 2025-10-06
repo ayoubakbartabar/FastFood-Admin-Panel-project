@@ -56,8 +56,6 @@ const BlogsSection: React.FC = () => {
             </div>
           ))
         : blogsWithFirstParagraph.map((blog) => {
-            console.log(blog.image);
-
             return (
               <div key={blog.id} className="blog-card">
                 <img src={blog.image} alt={blog.title} className="blog-image" />
