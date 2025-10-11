@@ -1,8 +1,11 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { API_BASE_URL } from "../../../types/server/productApi";
 import type { Product } from "../../../types/server/productApi";
+
 import "./ProductCartSection.css";
+
 import AddBlogCard from "../../../pages/BlogPage/BlogPageCom/AddBlogCard/AddBlogCard";
 
 // Single Product Card Component
@@ -58,7 +61,7 @@ const ProductCartSection: React.FC<ProductCartSectionProps> = memo(
     const [visibleProducts, setVisibleProducts] = useState<Product[]>([]);
     const [page, setPage] = useState(1);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
-    const itemsPerPage = 6;
+    const itemsPerPage = 3;
 
     // Ref for IntersectionObserver
     const loaderRef = useRef<HTMLDivElement | null>(null);
@@ -85,7 +88,7 @@ const ProductCartSection: React.FC<ProductCartSectionProps> = memo(
           setVisibleProducts((prev) => [...prev, ...nextProducts]);
         }
         setIsLoadingMore(false);
-      }, 1000);
+      }, 2500);
     }, [page, products]);
 
     // IntersectionObserver to detect scroll near bottom
