@@ -19,7 +19,7 @@ const BlogsSection: React.FC = () => {
   const [visibleBlogs, setVisibleBlogs] = useState<BlogWithParagraph[]>([]);
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
-  const itemsPerPage = 4;
+  const itemsPerPage = 3;
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
@@ -68,7 +68,7 @@ const BlogsSection: React.FC = () => {
         setVisibleBlogs((prev) => [...prev, ...nextBlogs]);
       }
       setLoadingMore(false);
-    }, 1000);
+    }, 5000);
   }, [page, blogsWithFirstParagraph]);
 
   // IntersectionObserver for infinite scroll
